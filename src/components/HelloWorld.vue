@@ -1,16 +1,21 @@
 <template>
 <div class="hello">
   <h1>{{ msg }}</h1>
+  <h1>{{name}}</h1>
   <h2>count:{{count}}</h2>
-  <a-button type='primary' @click="onClick">count ++ </a-button>
+  <a-button type='primary' @click="onClick" ghost>count ++ </a-button>
 </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
+  onMounted,
+  reactive,
+  Ref,
   ref,
   Slots,
+  toRefs,
   watchEffect
 } from "vue";
 interface Data {
@@ -26,19 +31,37 @@ export default defineComponent({
   props: {
     msg: String
   },
+  created() {
+    console.log('created');
+  },
   setup(props, content) {
-    const count = ref(0);
+    const count: Ref<number> = ref(0);
+    const state = reactive({
+      count,
+      name: 'name'
+    })
     const onClick: Function = (): void => {
       count.value++;
+      state.name = 'click name';
     }
     watchEffect(() => {
       console.log(`count is: ` + count.value);
+      console.log(props.msg);
+    },)
+    onMounted(() => {
+      console.log('onMounted');
     })
     return {
-      count,
-      onClick
+      onClick,
+      ...toRefs(state)
     }
   },
+  beforeMount() {
+    console.log('beforeMount');
+  },
+  mounted() {
+    console.log('mounted');
+  }
 });
 </script>
 
