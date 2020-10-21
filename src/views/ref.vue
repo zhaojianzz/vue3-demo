@@ -1,37 +1,28 @@
 <template>
-  <div v-for="item of list" :ref="setRefItems" :key="item">
+  <div v-for="item of list" :key="item">
     {{ item }}
   </div>
+  <a-button ghost type="primary" @click="onAdd"> add</a-button>
   <div ref="divRef">
     divref
   </div>
 </template>
 <script>
-import { onBeforeUpdate, onMounted, onUpdated, ref } from "vue";
+import { reactive, ref, toRefs } from "vue";
 export default {
   setup() {
-    const list = [1, 2, 3, 4];
-    let refItems = [];
+    const data = reactive({
+      list: []
+    });
     const divRef = ref(null);
-    const setRefItems = el => {
-      refItems.push(el);
+    const onAdd = () => {
+      console.log("refItem :>> ", data.list);
+      data.list.push(11);
     };
-    onMounted(() => {
-      console.log("refItems :>> ", refItems);
-      console.log("divRef :>> ", divRef.value.innerText);
-    });
-    onBeforeUpdate(() => {
-      refItems = [];
-    });
-    onUpdated(() => {
-      console.log("1 :>> ", 1);
-      console.log("refImtes[0] :>> ", refItems[0]);
-    });
     return {
-      list,
-      refItems,
+      ...toRefs(data),
       divRef,
-      setRefItems
+      onAdd
     };
   }
 };

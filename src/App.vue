@@ -1,8 +1,8 @@
 <template>
   <div id="nav">
-    <router-link v-for="item of paths" :key="item" :to="item">
-      {{ item.substr(1) }} |</router-link
-    >
+    <div class="nav" v-for="item of paths" :key="item">
+      <router-link :to="item"> {{ item.substr(1) }} |</router-link>
+    </div>
   </div>
   <router-view />
 </template>
@@ -31,6 +31,8 @@ export default {
 
 #nav {
   padding: 30px;
+  display: flex;
+  justify-content: center;
 }
 
 #nav a {
@@ -40,5 +42,8 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+.nav {
+  margin: 0px 5px;
 }
 </style>

@@ -65,9 +65,7 @@ const loop = (route: RouteType): RouteType => {
 };
 export function getFilesPaths() {
   const context = require.context("../views/", true, /\.vue/);
-  console.log("context :>> ", context);
   const files = context.keys();
-  console.log("files :>> ", files);
   const filesToPaths = (files: Array<string>): Array<RegExpMatchArray | null> =>
     files.map(file => file.match(/\/\w+/g));
   const paths = filesToPaths(files);

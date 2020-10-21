@@ -1,7 +1,9 @@
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, h } from "vue";
+
+export default defineComponent({
   render() {
-    return <span>111</span>;
+    return h("span", 111);
   }
-};
+});
 </script>

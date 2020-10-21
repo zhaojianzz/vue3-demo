@@ -1,19 +1,20 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <div>home msg: {{ msg }}</div>
+    <div v-highlight="'red'">home msg: {{ msg }}</div>
     <HelloWorld v-model:msg="msg" />
+    <Directive />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineAsyncComponent, defineComponent, ref, watch } from "vue";
 import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
-
 export default defineComponent({
   name: "Home",
   components: {
-    HelloWorld
+    HelloWorld,
+    Directive: defineAsyncComponent(() => import("@/components/directive.vue"))
   },
   setup() {
     const msg = ref("Welcome to Your Vue.js + TypeScript App");
