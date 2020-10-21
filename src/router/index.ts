@@ -1,6 +1,6 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 // import Home from '../views/Home.vue';
-import { createRoutes } from '@/utils/router';
+import { createRoutes } from "@/utils/router";
 // const routes: Array<RouteRecordRaw> = [
 //   {
 //     path: '/',
@@ -17,10 +17,10 @@ import { createRoutes } from '@/utils/router';
 //   },
 // ];
 const routes = createRoutes();
-console.log('routes :>> ', routes);
+console.log("routes :>> ", routes);
 const router = createRouter({
   history: createWebHashHistory(),
-  routes,
+  routes
 });
 
 export default router;

@@ -1,10 +1,11 @@
 <template>
-<div class="hello">
-  <h1>{{ msg }}</h1>
-  <h1>{{name}}</h1>
-  <h2>count:{{count}}</h2>
-  <a-button type='primary' @click="onClick" ghost>count ++ </a-button>
-</div>
+  <div class="hello">
+    <h1>msg: {{ msg }}</h1>
+    <h1>contentMsg: {{ contentMsg }}</h1>
+    <h1>{{ name }}</h1>
+    <h2>count:{{ count }}</h2>
+    <a-button type="primary" @click="onClick" ghost>count ++ </a-button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -19,11 +20,11 @@ import {
   watchEffect
 } from "vue";
 interface Data {
-  msg: string
+  msg: string;
 }
 interface SetupContext {
-  attrs: Data
-  slots: Slots
+  attrs: Data;
+  slots: Slots;
   emit: (event: string, ...args: unknown[]) => void;
 }
 export default defineComponent({
@@ -32,35 +33,37 @@ export default defineComponent({
     msg: String
   },
   created() {
-    console.log('created');
+    console.log("created");
   },
   setup(props, content) {
     const count: Ref<number> = ref(0);
     const state = reactive({
       count,
-      name: 'name'
-    })
+      name: "name",
+      contentMsg: props.msg
+    });
     const onClick: Function = (): void => {
       count.value++;
-      state.name = 'click name';
-    }
+      state.name = "click name";
+      state.contentMsg = "change msg";
+    };
     watchEffect(() => {
       console.log(`count is: ` + count.value);
       console.log(props.msg);
-    },)
+    });
     onMounted(() => {
-      console.log('onMounted');
-    })
+      console.log("onMounted");
+    });
     return {
       onClick,
       ...toRefs(state)
-    }
+    };
   },
   beforeMount() {
-    console.log('beforeMount');
+    console.log("beforeMount");
   },
   mounted() {
-    console.log('mounted');
+    console.log("mounted");
   }
 });
 </script>

@@ -1,11 +1,25 @@
 <template>
   <div id="nav">
-    <router-link to="/Home">Home</router-link>|
-    <router-link to="/about">About</router-link>
+    <router-link v-for="item of paths" :key="item" :to="item">
+      {{ item.substr(1) }} |</router-link
+    >
   </div>
   <router-view />
 </template>
-
+<script>
+import { getFilesPaths } from "@/utils/router";
+export default {
+  setup() {
+    const paths = getFilesPaths()
+      .map(item => item.join(""))
+      .filter(item => !item.includes("index"));
+    console.log("paths :>> ", paths);
+    return {
+      paths
+    };
+  }
+};
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

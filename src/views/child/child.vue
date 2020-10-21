@@ -1,7 +1,7 @@
 <script>
 export default {
   render() {
-    return <router-view />;
+    return <span>111</span>;
   }
 };
 </script>

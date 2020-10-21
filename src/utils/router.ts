@@ -1,6 +1,5 @@
-import { DefineComponent } from 'vue';
-import { RouteRecordRaw } from 'vue-router';
-import Home from '../views/Home.vue';
+import { DefineComponent } from "vue";
+import { RouteRecordRaw } from "vue-router";
 interface LevelType {
   [key: string]: RouteType;
 }
@@ -14,7 +13,7 @@ interface RouteType {
   components?: never;
 }
 const registerQuery = (obj: RouteType) => {
-  obj.props = (route: { query: { [x: string]: any } }) => {
+  obj.props = (route: { query: { [x: string]: never } }) => {
     const queryKeys = Object.keys(route.query);
     return queryKeys.reduce((obj: { [key: string]: string }, key) => {
       obj[key] = route.query[key];
@@ -23,24 +22,23 @@ const registerQuery = (obj: RouteType) => {
   };
   return obj;
 };
-const loop = (route: RouteType) => {
+const loop = (route: RouteType): RouteType => {
   const levelMap: LevelType = {};
   const level = route.children;
   /* wide first */
-  level.forEach((arr) => {
+  level.forEach(arr => {
     if ((arr as RegExpMatchArray).length) {
       let head = (arr as RegExpMatchArray).shift();
       if (!head) {
-        head = '';
+        head = "";
       }
       const absolutePath = `${route.absolutePath || route.path}${head}`;
-      const path = route.path === '' ? head : head.replace('/', '');
-      const mergeKey = path.replace('/', '');
+      const path = route.path === "" ? head : head.replace("/", "");
       if (!levelMap[head]) {
         levelMap[head] = registerQuery({
           path,
           absolutePath,
-          children: [],
+          children: []
         });
       }
       if ((arr as RegExpMatchArray).length === 0) {
@@ -50,35 +48,46 @@ const loop = (route: RouteType) => {
       }
     }
   });
-  route.children = Object.keys(levelMap).map((key) => {
+  route.children = Object.keys(levelMap).map(key => {
     /* deep first */
     if (levelMap[key].children.length > 0) {
-      loop(levelMap[key]);
+      levelMap[key] = loop(levelMap[key]);
       // if (!levelMap[key].component) {
       //   levelMap[key].component = levelMap['/index'].component;
       // }
     }
-    if (key === '/index') {
+    if (key === "/index") {
       route.component = levelMap[key].component;
     }
     return levelMap[key];
   });
+  return route;
 };
-export function createRoutes(): Array<RouteRecordRaw> {
-  const context = require.context('../views/', true, /\.vue/);
+export function getFilesPaths() {
+  const context = require.context("../views/", true, /\.vue/);
+  console.log("context :>> ", context);
   const files = context.keys();
-  const defaultRoutes: Array<RouteRecordRaw> = [
-    {
-      path: '',
-      redirect: '/Home',
-    },
-  ];
+  console.log("files :>> ", files);
   const filesToPaths = (files: Array<string>): Array<RegExpMatchArray | null> =>
-    files.map((file) => file.match(/\/\w+/g));
+    files.map(file => file.match(/\/\w+/g));
   const paths = filesToPaths(files);
+  return paths;
+}
+export function createRoutes(): Array<RouteRecordRaw> {
+  const defaultRoutes: Array<RouteRecordRaw | RouteType> = [
+    {
+      path: "",
+      redirect: "/index"
+    },
+    {
+      path: "/index",
+      redirect: "/Home"
+    }
+  ];
+  const paths = getFilesPaths();
   const pathsToRoutes = (paths: Array<RegExpMatchArray | null>) => {
-    const routesTree: Array<RouteType> = [{ path: '', children: paths }];
-    loop(routesTree[0]);
+    const routesTree: Array<RouteType> = [{ path: "", children: paths }];
+    routesTree[0] = loop(routesTree[0]);
     return routesTree;
   };
   let routes: Array<any> = pathsToRoutes(paths);
