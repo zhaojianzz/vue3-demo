@@ -8,3 +8,11 @@ export function highlight(app: App) {
     }
   });
 }
+export function loading(app: App) {
+  app.directive("loading", {
+    beforeMount(el: HTMLElement, binding) {
+      console.log("el :>> ", el);
+      el.style.background = binding.value;
+    }
+  });
+}
