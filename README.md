@@ -1,4 +1,4 @@
-# vue3-project
+# vue3-demos
 
 ## Project setup
 ```
@@ -9,16 +9,5 @@ npm install
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### data选项
+  vue3 data选项只接受返回object的function,vue2可以接受object和function,mixin合并改为浅合并,只合并第一层
